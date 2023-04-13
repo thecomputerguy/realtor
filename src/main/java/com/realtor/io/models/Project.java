@@ -1,6 +1,16 @@
 package com.realtor.io.models;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,31 +36,32 @@ public class Project implements Serializable {
     public static final long serialVersionUID = 12345336789L;
 
     @Id
+    @Column(updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @Column(name = "name")
-    public String name;
+    private String name;
 
     @Column(name = "description")
-    public String description;
+    private String description;
 
     @Column(name = "hosted")
-    public String hosted;
+    private String hosted;
 
     @Column(name = "image_urls")
-    public String imageUrls;
+    private String imageUrls;
 
     @Column(name = "status")
     @Enumerated
-    public ProjectStatus status;
+    private ProjectStatus status;
 
     @Column(name = "deleted")
-    public Boolean deleted;
+    private Boolean deleted;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    public Collection<Lead> leads;
+    private Collection<Lead> leads;
 
     @Embedded
-    public AuditInfo auditInfo;
+    private AuditInfo auditInfo;
 }

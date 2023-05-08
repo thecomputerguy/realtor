@@ -3,23 +3,27 @@ package com.realtor.io.dto;
 import com.realtor.io.models.ProjectStatus;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
-public record ProjectDTO(
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+@EqualsAndHashCode
+@ToString
+public class ProjectDTO{
+        Long id;
         @NotNull(message = "Name cannot be null")
         @Size(min = 5, max = 2000, message = "Name must be at least 5 characters and at most 2000 characters long")
-        String name,
+        String name;
         @NotNull(message = "Description cannot be null")
         @Size(min = 5, max = 4000, message = "Description must be at least 5 characters and at most 4000 characters long")
-        String description,
+        String description;
         @NotNull(message = "Hosted cannot be null")
         @Size(min = 5, max = 2000, message = "Hosted must be at least 5 characters and at most 2000 characters long")
-        String hosted,
-        String imageUrls,
+        String hosted;
+        String imageUrls;
         @NotNull(message = "Status cannot be null")
-        ProjectStatus status,
+        ProjectStatus status;
         @NotNull(message = "Deleted cannot be null")
-        Boolean deleted
-) {
-        public ProjectDTO(){ this("DummyValue", "DummyValue", "DummyValue", "DummyValue", ProjectStatus.STARTED, false);}
-
+        Boolean deleted;
 }

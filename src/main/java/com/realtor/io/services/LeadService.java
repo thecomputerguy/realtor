@@ -1,19 +1,25 @@
 package com.realtor.io.services;
 
 import com.realtor.io.exceptions.LeadNotFoundException;
+import com.realtor.io.models.AuditInfo;
 import com.realtor.io.models.Lead;
 import com.realtor.io.repositories.LeadRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Collection;
 @Service
+@AllArgsConstructor
 public class LeadService {
     LeadRepository leadRepository;
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED)
     public Lead create(Lead lead) {
+        AuditInfo auditInfo = AuditInfo.builder().createdOn(Instant.now()).createdBy("root").build();
+        lead.setAuditInfo(auditInfo);
         return leadRepository.save(lead);
     }
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
@@ -23,6 +29,8 @@ public class LeadService {
     }
     @Transactional(propagation = Propagation.SUPPORTS, isolation = Isolation.READ_COMMITTED)
     public Lead update(Lead lead) {
+        lead.getAuditInfo().setUpdatedOn(Instant.now());
+        lead.getAuditInfo().setUpdatedBy("root");
         return leadRepository.save(lead);
     }
     @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)

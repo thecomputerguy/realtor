@@ -47,7 +47,7 @@ public class Lead implements Serializable {
     public String firstName;
 
     @Column(name = "surname")
-    public String surname;
+    public String middleName;
 
     @Column(name = "last_name")
     public String lastName;

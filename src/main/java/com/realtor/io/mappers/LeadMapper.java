@@ -17,7 +17,7 @@ public interface LeadMapper {
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "project", ignore = true)
-    Lead updateLead(LeadDTO leadDTO, @MappingTarget Lead lead);
+    Lead updateLead(LeadDTO leadDTO, @MappingTarget Lead lead, @Context ProjectRepository projectRepository);
 
     @AfterMapping
     default void afterUpdateLeadDTO(Lead lead, @MappingTarget LeadDTO leadDTO) {

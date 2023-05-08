@@ -7,6 +7,7 @@ import com.realtor.io.models.Project;
 import com.realtor.io.services.ProjectService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +22,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/project/")
+@CrossOrigin(origins = "*")
+@AllArgsConstructor
 public class ProjectController {
 
     ProjectMapper projectMapper;
     ProjectService projectService;
     Environment environment;
     URIHelper uriHelper;
+
+
 
     @PostMapping(name = "create")
     public ResponseEntity<?> create(@RequestBody @Valid ProjectDTO projectDTO) throws UnknownHostException {
@@ -39,8 +44,8 @@ public class ProjectController {
     }
 
 
-    @PutMapping("update")
-    public ResponseEntity<?> update(@RequestBody @Valid ProjectDTO projectDTO, @RequestParam("id") @NotNull Long id){
+    @PutMapping("update/{id}")
+    public ResponseEntity<?> update(@RequestBody @Valid ProjectDTO projectDTO, @PathVariable("id") @NotNull Long id){
         Project project = projectMapper.updateProject(projectDTO, projectService.findById(id));
         Project updated = projectService.update(project);
         ProjectDTO response = projectMapper.updateProjectDTO(updated, projectDTO);
@@ -48,10 +53,23 @@ public class ProjectController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> findById(@RequestParam("id") @NotNull Long id){
+    public ResponseEntity<?> findById(@PathVariable("id") @NotNull Long id){
         Project project = projectService.findById(id);
         ProjectDTO response = projectMapper.updateProjectDTO(project, new ProjectDTO());
-        return ResponseEntity.ok().body(response);
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("data", response);
+        return ResponseEntity.ok().body(body);
+    }
+
+    @GetMapping("hostName/{hostName}")
+    public ResponseEntity<?> findByHostName(@PathVariable("hostName") @NotNull String hostName){
+        Project project = projectService.findByHosted(hostName);
+        ProjectDTO response = projectMapper.updateProjectDTO(project, new ProjectDTO());
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("data", response);
+        return ResponseEntity.ok().body(body);
     }
 
     @GetMapping("all")
@@ -68,7 +86,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<?> deleteById(@RequestParam("id") @NotNull Long id){
+    public ResponseEntity<?> deleteById(@PathVariable("id") @NotNull Long id){
         projectService.deleteById(id);
         return ResponseEntity.ok().body("");
     }

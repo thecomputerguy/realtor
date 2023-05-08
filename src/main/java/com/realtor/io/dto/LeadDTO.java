@@ -11,6 +11,7 @@ import lombok.*;
 @EqualsAndHashCode
 @ToString
 public class LeadDTO{
+        Long id;
         @NotNull(message = "Project ID cannot be null")
         Long project;
         @NotNull(message = "First Name cannot be null")
@@ -18,7 +19,7 @@ public class LeadDTO{
         String firstName;
         @NotNull(message = "Surname cannot be null")
         @Size(min = 5, max = 255, message = "Surname must be at least 5 characters and at most 255 characters long")
-        String surname;
+        String middleName;
         @NotNull(message = "Last Name cannot be null")
         @Size(min = 5, max = 255, message = "Last Name must be at least 5 characters and at most 255 characters long")
         String lastName;
@@ -32,5 +33,4 @@ public class LeadDTO{
         LeadStatus status;
         @NotNull(message = "Deleted cannot be null")
         Boolean deleted;
-
 }

@@ -2,7 +2,6 @@ package com.realtor.io.helpers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.NoArgsConstructor;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,6 @@ import java.net.UnknownHostException;
 
 @Component
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
 public class URIHelper {
 
